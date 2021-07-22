@@ -1,0 +1,397 @@
+Web App by Python + Flask
+
+1. What is Flask ?
+    > Flask is a lightweight framework for developing web applications using python
+    > A Framework is a scaffold that you can build app around.
+    > Flask is designed to enable you to build and scale app quickly.
+    > Extensions can be used to extend the functionality of flask.
+    > Flask doesn't include database abstraction layer and form validation.
+	but there are libraries or extensions u can use to add those functionality into flask.
+    > Install Flask
+	> pip install flask.
+
+2. Pros:
+     > Easy to get started.
+     > Customizable
+     > WSGI (Web Server Gateway Interface) Compatible
+    Cons:
+     > Limited functionality from the box.
+     > No Database Setup
+
+3. What is Bootstrap ?
+     > Bootstrap is a free, open source HTML | CSS | Javascript framework for building responsive websites
+     > A framework is a scaffold that u can build apps around.
+     > Responsive websites are designed to automatically adjust themselves to look good on all devices.(Small phones, tabletes, desktops.)
+     > Bootstrap is compatible with all modern web browsers.
+
+     > Bootstrap includes HTML | CSS based design templates for :
+	> Typography, Forms, Buttons, Tables, Navigation, Models, Image Carousels,
+	   it also includes JavaScript Plugins.
+
+4. Setup flask environment variables.
+     
+     > Create a file with .flaskenv
+     > Set the variable inside .flaskenv
+	~ FLASK_ENV = development	-    (set the development env to development), (adv for this each time u make changes to ur app server will automatically reload the web page for the application.)
+	~ FLASK_APP = module.py	-    (This is the module that will load these env variables each time the flask app runs.)
+     > Install package to invoke variables
+	~ pip install python-dotenv(.env)
+	~ Dotenv is a module that loads environment variables from a .env file.
+
+     > pip install python-dotenv 	-    This will enable env variables to be invoked each time u run the python app.
+
+
+5. Create a minimal flask application.
+    
+     > Need a good text editor : atom | vscode | sublimetext
+     > Create a python module (file) and save it with .py extension
+     > Import class Flask
+     > Instantiate the class
+     > Create a default route.
+     > Run the app
+
+6. Creating Endpoints: 
+     > What are endpoints :
+	> Endpoints refers to the name of the view function.
+	> A View function is the function that respons to requests from ur application.
+
+	> This is the basic endpoint.
+	> @app.route('/about')
+	   def about( ):
+	          return '<h1>Hello world from about page</h1>'
+
+	> on (127.0.0.1:5000/about) this page the text will showed. 
+
+7. Rendering templates in flask.
+	> Templates let's u separate html from python code.
+	> Flask looks for templates in a folder named named templates in ur project folder.
+	> The method named render_template is used to render templates.
+	> Flasks has a built-in template engine named Jinga {{ }},
+		which enables u to pass variables into html templates.
+ 
+	> {{ }} 	-	This is the flask template engine (ginge)
+			This will help to pull variables from other files.
+
+8.Using condtional statements:
+	> Conditional statements are statements that will execute a 
+	   block of code (if and else) based on if a condition is true of false
+	> Ex of conditional statements are if and ele statements.
+
+	>in (index.html) this is how we use cond-statements in flask
+ 
+	{% if quotes %}	-	if this line true next line showed.
+	<h2> {{ quotes }} </h2>
+	{% else %}		-	if first line false next line showed
+	<h2>No quotes here ...</h2>
+	{% endif %}	-	we should end conditional statements like this.
+
+9. Iterating over a list :
+	> Using for loop to iterate a list.
+	> For loop is used to iterating over a sequence like list.
+	> For loop executes a set of statements, once for each item in a list.
+	   Ex:
+		cars = ['bmw','benz','audi','bentley','jaquar']
+		for x in cars:
+		      print(x)
+
+10. From here we build our (flask+py) project named Favorite quotes:
+	1. Create static folder
+	2. Add Bootstrap Css
+	3. Modify index.html
+	4. Add inline CSS
+	5. Create quotes.html template
+	6. Add form to quotes.html template	
+
+10.1 Create a new database in postgres:
+	>open pgadmin and create new database called quotes.
+
+10.2 Create a route to process form data: 
+	>So when someone add new quote, when the form data is submitted, 
+	  we want something to be able to process.
+	> so we're going to create route that will handle that.
+
+10.3 Database Integration:
+	>here we install some components that we will need to integrate database into our project.
+	>psycopg2  -  is database driver or database adapter used to communicate btwn python program and postgres database system 
+	
+	>SQLAlchemy  -  is a library used as an object relational mapper tool(ORM).
+			this tool translates python classes to tables on relational databases,
+				and automatically converts function calls to SQL statements.
+
+10.4 Database Configuration:
+	> Import SQLAlchemy from flask_sqlalchemy
+	> app configuration settings.
+    app.config['SQLALCHEMY_DATABASE_URI']='postgresql+psycopg2://postgres:password@localhost/quotes'
+	> this enables u to communicate with db
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+
+
+10.5 Creating table:
+	> here we create a table in our db within our python application.
+
+	> Create an instance of SQLAlchemy
+	> db = SQLAlchemy(app)
+
+	> class Favquotes(db.Model):
+		id = db.Column(db.Integer,primary_key=True)
+		author = db.column(db.String(30))
+		quote = db.column(db.string(2000))
+
+	> C:\Users\LENOVO\Desktop\py_flask>py
+
+10.6 Install gunicorn server
+	> WSGI (web server gateway interface) :		
+		> Its a protocol for web servers to forward requests to web applications,
+		   or frameworks written in python.
+	> Gunicorn: 
+		> Gunicorn is a python WSGI HTTP server that facilitates communication
+		   between your web app and the web server.
+	> pip install gunicorn
+
+11.Deploying your app to internet (cloud):
+	>deploying ur app to cloud so others can interact with our app.
+	>here we deploy our app to a hosting platform (Heroku).
+	   >Heroku
+	          > Heroku is a platform that enables developers to build, to run and operate different applications in the cloud.
+	> we can follow these steps to deploy our app.
+	      > Create a procfile to ur project
+	            > procfile specifies the commands to be executed when ur web apps starts.
+	      > Create a requirements.txt file 
+	            > requirements.txt contains a list of all packages installed for ur app project.
+	      > Create a .gitignore file
+	            > .gitignore is a text file that tells git what to ignore in ur app project,
+		from pushing code from ur project directory to remote repository on github.
+	      > log on to heroku create app in heroku.
+	      > provision PostgreSQL Database server on Heroku.
+	      > Create new repository(repo) on Github.
+	      > Push your code from ur computer to github.
+	      > After that connect Heroku app to github repo to deploy your project.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Steps :
+
+1. We build Fav Quotes webapp .
+
+1.C:\Users\LENOVO>cd desktop
+
+2.C:\Users\LENOVO\Desktop>mkdir py_flask
+
+3.C:\Users\LENOVO\Desktop>cd py_flask
+
+4.C:\Users\LENOVO\Desktop\py_flask>python -m venv venv
+
+5.C:\Users\LENOVO\Desktop\py_flask>cd venv
+
+6.C:\Users\LENOVO\Desktop\py_flask\venv>scripts\activate
+
+7.(venv) C:\Users\LENOVO\Desktop\py_flask\venv>
+
+8.(venv) C:\Users\LENOVO\Desktop\py_flask\venv>cd..
+
+9.(venv) C:\Users\LENOVO\Desktop\py_flask>pip install flask
+
+10.Open project folder, create .flaskenv file 
+      include this lines
+	FLASK_ENV=development
+	FLASK_APP=quotes.py
+
+11.(venv) C:\Users\LENOVO\Desktop\py_flask>pip install python-dotenv
+12.Create a .py file 
+      add this lines
+	from flask import Flask
+
+	app = Flask(__name__)
+
+	@app.route('/')
+	def index():
+		return '<h1>Hello world.</h1>'
+     > flask run 	-	This is a command for run the app
+13.(venv) C:\Users\LENOVO\Desktop\py_flask>flask run
+
+14.create endpoints , in .py file add this
+	@app.route('/about')
+	def about():
+	      return '<h1>This is a about page</h1>'
+
+	@app.route('/quote')
+	def quote():
+	      return '<h1>Oh my god the world is great.</h1>'
+15. render templates
+	create folder (templates) and create index.html file
+	>inside .py file 
+	
+	from flask import render_template
+	
+	@app.route('/')
+	def index():
+	      return render_template('index.html',quote="Kindness dont need translation")
+
+	inside the html file.
+	<h1>Hello world.</h1>
+	<h2> {{ quotes }} </h2>
+
+16. Using conditional statements :
+	in index.html file
+
+	{% if quotes %}	
+	<h2> {{ quotes }} </h2>
+	{% else %}		
+	<h2>No quotes here ...</h2>
+	{% endif %}	
+
+17. Iterating over a list :
+	> in .py file 
+	@app.route('/')
+	def index():
+	cars=['BMW','Bentley','Jaguar','Ferrari']
+		return render_template('index.html',cars=cars)
+	
+	> in index.html file 
+	<h2>My favorite cars are: </h2>
+	<ul>
+		{% for car in cars %}
+		<li>{{ car }}</li>
+		{% endfor %}
+	</ul>
+	> This is how we make iterate in flask file.
+
+
+18.From here we build our (flask+py) project named Favorite quotes:
+	> Create static folder inside the project
+	> Add Bootstrap Css inside static folder
+	> Modify index.html as how u want the page
+	> Add inline CSS in index.html file
+	> Create quotes.html template
+	> Add form to quotes.html template	
+      > here we create two pages that we use .py file and quote and index html files here.
+
+19.Create a route to process form data :
+	
+	from flask import request,redirect,url_for
+	
+	@app.route('/process',methods =['POST'])      -    method (http method)
+	def process():
+		author = request.form['author']        -   the request method capture the author information from the form and stored into the variable(author)
+		quote = request.form['quote']
+		return redirect(url_for('index.html')) - 	this will redirect the user to index.html after submit the form
+	in quotes.html file
+	 <form action="/process" method="post">         -   so here once the form submitted , the route code process is handle the processing of the form data.
+
+20.Database integration :
+	install two components :
+		psycopg2 and SQLAlchemy
+	pip install psycopg2
+	pip install Flask-SQLAlchemy
+
+22.Database configuration:
+	> inside .py file 
+	  import flask_sqlalchemy import SQLAlchemy
+	  app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql+psycopg2://postgres:password@localhost/quotes'
+	  app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+	
+	>Here we connect to the database.
+23. Create table:
+	>in .py file
+	   db = SQLAlchemy(app)
+	> class Favquotes(db.Model):
+		id = db.Column(db.Integer,primary_key=True)
+		author = db.column(db.String(30))
+		quote = db.column(db.string(2000))
+
+   > (venv) C:\Users\LENOVO\Desktop\py_flask>py 	-	this py command will allow u to interact with python shell
+	>in python shell
+	>>> from quotes import db
+	>>> db.create_all()
+	>>>exit().
+	> that's it table created, Make sure table created . check postgres database.
+24. Install gunicorn server
+	> pip install gunicorn
+
+25. Storing data inside database :
+	> in .py file
+	> @app.route('/')
+	   def index():
+	          result = Favquotes.query.all()
+	          return render_template('index.html',result=result)
+	
+	> @app.route('/process',methods =['POST'])
+	   def process():
+	   quotedata =Favquotes(author=author,quote=quote)
+	   db.session.add(quotedata)
+	   db.session.commit()
+
+  	   return redirect(url_for('index'))
+
+	> in quotes.html
+	   > set name="author" in quote author input type.
+	   > set name="quote" in textarea of Quote
+
+	> in index.html file
+	> create for loop 	
+	  >  under <h1>Favourite Quotes </h1>
+	      {% for r in result %}
+	     and  <h1>{{ r.author }}</h1>
+	             <p>{{ r.quote }}</p>
+
+	> change these all changes.
+
+26.Test our app
+	> open app add author , and quotes.
+	> check database(postgres) 
+
+27. Deploying app to internet(cloud) :
+	> create a procfile inside ur project.
+	>inside procfile 
+	      > web: gunicorn quotes:app
+	> create requirements.txt
+	> in cmd 
+	> pip freeze > requirements.txt
+	> check requirements. txt file in ur project 	
+	      > It'll list the packages installed for ur project.
+	> create .gitignore file inside ur project 
+	> inside .gitignore file 
+	        venv/
+	        __pycache__/
+	    > It will exclude these 2 directory when the code is being pushed to github.
+
+	> create a new app on heroku to host ur project app.
+	      > first create a account in heroku and create app in heroku.
+	      > https://dashboard.heroku.com/apps.
+	      > click New> apps > set appname > set region >create app.
+	> provision postgresql on heroku.
+	      > inside heroku dashboard > resources > Add-ons > type Postgres >click it > submit.
+	      > settings in heroku > review config vars > copy database url > paste it in .py file.
+	      > make this changes. in .py file
+	              >#app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql+psycopg2://postgres:Maha1996@localhost/quotes'
+		  app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ynilcbqdavpmnq:c35cd563f1720776508bfd0b842110a0e4805cfd94057dc4313788e6d937722f@ec2-54-195-76-73.eu-west-1.compute.amazonaws.com:5432/d7i3f66mhuiaj4'
+	      > Create a new database table for heroku database.
+	              >in cmd
+		    py
+	in py shell   from quotes import db
+		    db.create_all()
+		    exit().
+
+Part 2 : Deploy app in cloud :
+	> Pushing code to Github and deploying app to heroku cloud.
+	> sign in ur github and create new repository(folder) named Fav- Quotes.
+	> in cmd
+	           git init 	-	This command will create a new repository(git) inside project.
+	           git add .	-	. means it'll add all the directory
